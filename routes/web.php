@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/', [EventController::class, 'getPaginatedEvents']);
 
 Route::get('login', function () {
     return view('login');
