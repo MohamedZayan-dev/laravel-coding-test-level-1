@@ -5,6 +5,7 @@ namespace App\Http\Controllers\web;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -13,7 +14,8 @@ class EventController extends Controller
     public function getPaginatedEvents()
     {
         $events = Event::paginate(4);
-        return view('events.index')->with('events', $events);
+        $randomUsers = Http::get('https://gorest.co.in/public/v2/users');
+        return view('events.index')->with(['events' => $events, 'randomUsers' => json_decode($randomUsers)]);
     }
 
     public function getEvent($id)
@@ -34,7 +36,7 @@ class EventController extends Controller
             'slug' => 'required',
         ]);
         Event::create($validated);
-        return redirect('/event/create')->with(["success" => "Event was created successfully"]);
+        return redirect('/event/create')->with(["success" => "Event was created successfully and email is sent"]);
     }
 
     public function getEventEditPage($id)

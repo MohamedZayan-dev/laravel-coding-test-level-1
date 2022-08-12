@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\v1\EventController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,14 +17,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::group(['prefix' => 'v1'], function (){
-    Route::group(['namespace' => 'events'], function (){
+Route::group(['prefix' => 'v1'], function () {
+    Route::group(['namespace' => 'events'], function () {
         Route::get('events', [EventController::class, 'getAllEvents']);
         Route::get('events/active-events', [EventController::class, 'getActiveEvents']);
         Route::get('events/{id}', [EventController::class, 'getEvent']);
-        Route::post('events', [EventController::class, 'createEvent']);
-        Route::put('events/{id}', [EventController::class, 'updateOrCreateEvent']);
-        Route::patch('events/{id}', [EventController::class, 'updateEvent']);
-        Route::delete('events/{id}', [EventController::class, 'deleteEvent']);
+        Route::post('events', [EventController::class, 'createEvent'])->middleware('auth');
+        Route::put('events/{id}', [EventController::class, 'updateOrCreateEvent'])->middleware('auth');
+        Route::patch('events/{id}', [EventController::class, 'updateEvent'])->middleware('auth');
+        Route::delete('events/{id}', [EventController::class, 'deleteEvent'])->middleware('auth');
     });
 });

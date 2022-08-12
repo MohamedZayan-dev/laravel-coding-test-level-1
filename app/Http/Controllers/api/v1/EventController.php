@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
 
 class EventController extends Controller
@@ -30,7 +31,13 @@ class EventController extends Controller
 
     public function getEvent($id)
     {
-        $event = Event::find($id);
+        $cachedEvent = Redis::get('event_' . $id);
+        if (isset($cachedEvent))
+            $event = json_decode($cachedEvent, FALSE);
+        else{
+            $event = Event::find($id);
+            Redis::set('event_' . $id, $event);
+        }
         return response()->json($event);
     }
 

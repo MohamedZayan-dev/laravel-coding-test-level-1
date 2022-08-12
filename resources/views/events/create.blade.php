@@ -4,6 +4,7 @@
 
     <div class="mt-5 container">
         <a href="/events" type="button" class="btn btn-primary mb-4">Home</a>
+        
         @if (session('success'))
             <div class="alert alert-success" role="alert">
                 {{ session('success') }}
